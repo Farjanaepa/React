@@ -3,7 +3,11 @@ import './LoginPopup.css'
 const LoginPopup = () => {
   return (
     <div className='login-popup'>
-      login
+      <form className="login-popup-container">
+        <div className="login-popup-title">
+            <h2></h2>
+        </div>
+      </form>
     </div>
   )
 }
