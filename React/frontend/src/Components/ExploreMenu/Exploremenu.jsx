@@ -5,7 +5,7 @@ const Exploremenu = ({category,setCategory}) => {
 
   return (
     <div className='explore-menu' id='explore-menu'>
-        <h1>Explore  menu</h1>
+        <h1>Explore our menu</h1>
         <p className='explore-menu-text'>Choose from a diverse menu featuring a delectable array of dishes</p>
         <div className="explore-menu-list">
             {
