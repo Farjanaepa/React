@@ -4,7 +4,7 @@ import { connectDB } from "./config/db.js"
 
 // app config
 const app = express()
-const port = 4080
+const port = 4000
 
 // middleware
 app.use(express.json())
