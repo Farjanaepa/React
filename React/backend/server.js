@@ -4,14 +4,14 @@ import { connectDB } from "./config/db.js"
 
 // app config
 const app = express()
-const port = 4000
+const port = 4080
 
 // middleware
 app.use(express.json())
 app.use(cors())
 
 // DB connection
-connectDB()
+connectDB();
 
 app.get("/", (req, res) => {
     res.send("API working")
