@@ -1,39 +1,66 @@
 import userModel from "../models/userModel.js"
 
+// ইউজারের কার্টে আইটেম যোগ করা
+const addToCart = async (req, res) => {
+    try {
+        const userData = await userModel.findById(req.body.userId);
+        if (!userData) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
-//add items to user cart
+        const cartData = userData.cartData || new Map();
+        if (!cartData.has(req.body.itemId)) {
+            cartData.set(req.body.itemId, 1);
+        } else {
+            cartData.set(req.body.itemId, cartData.get(req.body.itemId) + 1);
+        }
 
-const addToCart = async (req,res) => {
-try {
-    let userData = await userModel.findOne({_id:req.body.userId});
-    let cartData = await userData.cartData;
-    if(!cartData[req.body.itemId])
-    {
-        cartData[req.body.itemId] = 1;
-
+        await userModel.findByIdAndUpdate(req.body.userId, { cartData });
+        res.json({ success: true, message: "Added to cart" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error adding to cart" });
     }
-    else{
-        cartData[req.body.itemId] += 1;
+};
+
+// ইউজারের কার্ট থেকে আইটেম সরানো
+const removeFromCart = async (req, res) => {
+    try {
+        const userData = await userModel.findById(req.body.userId);
+        if (!userData) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const cartData = userData.cartData || new Map();
+        if (cartData.has(req.body.itemId) && cartData.get(req.body.itemId) > 0) {
+            cartData.set(req.body.itemId, cartData.get(req.body.itemId) - 1);
+            if (cartData.get(req.body.itemId) === 0) {
+                cartData.delete(req.body.itemId);
+            }
+        }
+
+        await userModel.findByIdAndUpdate(req.body.userId, { cartData });
+        res.json({ success: true, message: "Removed from cart" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error removing from cart" });
     }
-    await userModel.findByIdAndUpdate(req.body.userId,{cartData});
-    res.json({success:true,message:"Added To Cart "});
-} catch (error) {
-    console.log(error);
-    res.json({success:false,message:"Error"})
-    
-}
+};
 
-}
+// ইউজারের কার্টের ডেটা ফেচ করা
+const getCart = async (req, res) => {
+    try {
+        const userData = await userModel.findById(req.body.userId);
+        if (!userData) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
-//remove items from user cart
+        const cartData = userData.cartData || new Map();
+        res.json({ success: true, cartData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error fetching cart data" });
+    }
+};
 
-const removeFromCart = async (req,res) => {
-
-}
-
-//fetch user cart data
-const getCart = async (req,res) => {
-
-}
-
-export {addToCart,removeFromCart,getCart}
+export { addToCart, removeFromCart, getCart };

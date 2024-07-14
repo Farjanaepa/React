@@ -22,7 +22,7 @@ const navigate = useNavigate();
         <br />
 
         <hr />
-        {food_list.map((item,index)=>{
+        {food_list.map((item, index)=>{
           if(cartItems[item._id]>0)
             {
 
@@ -79,6 +79,10 @@ const navigate = useNavigate();
       </div>
     </div>
   )
+
+
+
+ 
 }
 
 export default Cart
